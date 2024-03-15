@@ -1,43 +1,46 @@
-const ATTACK_VALUE =10;
-const STRONG_ATTACK_VALUE= 17;
-const MONSTER_ATTACK_VALUE =14;
+const ATTACK_VALUE = 10;
+const STRONG_ATTACK_VALUE = 17;
+const MONSTER_ATTACK_VALUE = 14;
+const HEAL_VALUE = 20;
 
-let chosenMaxLife=5;
-let currentMonsterHealth=chosenMaxLife;
+let chosenMaxLife = 5;
+let currentMonsterHealth = chosenMaxLife;
 let currentPlayerHealth = chosenMaxLife;
+let hasBonusLife = true;
 
 adjustHealthBars(chosenMaxLife);
+function endRound() {
+  const initialPlayerHealth = currentPlayerHealth;
+  const PlayerDamge = dealPlayerDamage(MONSTER_ATTACK_VALUE);
+  currentMonsterHealth -= playerDamage;
+  if (currentPlayerHealth <= 0 && hasBonusLife) {
+    hasBonusLife = false;
+    removeBonusLife();
+    currentPlayerHealth = initialPlayerHealth;
+    setPlayerHealth(initialPlayerHealth)
+    alert("you would be dead but bonus life saved");
+  }
 
-function attackMonster(mode){
-let maxDamage;
-if(mode==='ATTACK'){
-    maxDamage=ATTACK_VALUE;
-} else (mode==='STRONG_ATTACK'){
-    maxDamage =STRONG_ATTACK_VALUE;
-}
-const damage = dealMonsterDamage(maxDamage);
-currentMonsterHealth -= damage;
-const playerDamage= dealPlayerDamage(MONSTER_ATTACK_VALUE);
-currentPlayerHealth-=playerDamage;
-if(currentMonsterHealth<=0  && currentPlayerHealth>0 ){
-alert('you won');
-}else if(currentPlayerHealth<=0 && currentMonsterHealth>0){
-alert('you lost');
-}else if(currentPlayerHealth<=0 && currentMonsterHealth>0){
-alert('you have a draw!');
-}
-}
-
-function attackHandler(){
-   attackMonster(ATTACK);
+  if (currentMonsterHealth <= 0 && currentPlayerHealth > 0) {
+    alert("you won");
+  } else if (currentPlayerHealth <= 0 && currentMonsterHealth > 0) {
+    alert("you lost");
+  } else if (currentPlayerHealth <= 0 && currentMonsterHealth > 0) {
+    alert("you have a draw!");
+  }
 }
 
-
-function strongAttackHandler(){
-attackMonster('STRONG_ATTACK');
-
+function attackHandler() {
+  attackMonster(ATTACK);
 }
 
-attackBtn.addEventListener('click', attackHandler);
-strongAttackBtn.addEventListener('click', strongAttackHandler);
- 
+function strongAttackHandler() {
+  attackMonster("STRONG_ATTACK");
+}
+function healPlayerHandler() {
+  increasePlayerHealth(HEAL_VALUE);
+}
+
+attackBtn.addEventListener("click", attackHandler);
+strongAttackBtn.addEventListener("click", strongAttackHandler);
+healBtn.addEventListener("click", healPlayerHandler);
